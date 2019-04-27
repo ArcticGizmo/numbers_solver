@@ -95,6 +95,8 @@ class Solver(object):
             '/': lambda x, y: x // y if (x % y) == 0 else 0
         }
 
+        self.last_answer = None
+
     def answers(self, numbers, target):
         """ :rtype: Expression """
         n_numbers = len(numbers)
@@ -140,6 +142,7 @@ class Solver(object):
             if (best_expression is None) or (len(expression.numbers()) < len(best_expression.numbers())):
                 best_expression = expression
 
+        self.last_answer = best_expression
         return best_expression
 
 
