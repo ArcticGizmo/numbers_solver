@@ -1,4 +1,5 @@
-from countdown.solver import Solver, Expression
+from countdown.solver import Solver
+from random import randint
 from countdown.generator import get_numbers
 import sys
 
@@ -23,10 +24,10 @@ def run(n_large):
 if __name__ == '__main__':
     args = sys.argv
 
-    if len(args) < 2:
-        print('I need a number')
-        exit(-1)
+    n_large = randint(0, 5)
+    if len(args) > 1:
+        n_large = int(args[0])
 
-    run(int(args[1]))
+    run(n_large)
 
 
