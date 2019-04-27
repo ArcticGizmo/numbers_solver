@@ -17,13 +17,18 @@ def run(n_large):
     solver_thread.start()
 
     # prompt the user to start the timer
-    input('Hit enter to start timer')
-    print('Target: {}'.format(target))
-    timer()
+    try:
+        input('Hit enter to start timer')
+        print('Target: {}'.format(target))
+        timer()
 
-    if solver_thread.is_alive():
-        print('Awaiting solution')
-        solver_thread.join()
+        if solver_thread.is_alive():
+            print('Awaiting solution')
+            solver_thread.join()
+    except Exception as e:
+        solver_thread.join(1)
+        print('Solver terminated')
+        exit(1)
 
     best_answer = solver.last_answer
     print('\n--- Solution --- ')
