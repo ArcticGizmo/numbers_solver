@@ -98,6 +98,8 @@ class Solver(object):
         while iteration < n_numbers - 2:
             iteration += 1
             partials_map = process(numbers, self._ops, partials_map)
+            if len(partials_map[target]) > 0:
+                break
 
         # get the value closet to the target
         best_value = None
