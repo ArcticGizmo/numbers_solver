@@ -24,7 +24,7 @@ def get_numbers(n_large):
 
 def _select_n(choice_list, n):
     selection = []
-    choices = choice_list[0:-1]
+    choices = choice_list[0:]
 
     for _ in range(0, n):
         index = randint(0, len(choices) - 1)
