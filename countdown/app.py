@@ -16,16 +16,11 @@ def main():
 
     input('Hit enter to get solution')
 
-    print('Solution: {}'.format(str(best_answer)))
+    print('--- Solution --- ')
+    print('Numbers Used: {}'.format(best_answer.numbers()))
+    for step in best_answer.ordered_steps():
+        print(step)
 
-
-    # solver = Solver()
-    #
-    # numbers = [9, 6, 4, 3, 3, 50]
-    # target = 330
-    # print('Numbers: {}'.format(numbers))
-    #
-    # possible_numbers = solver.answers(numbers, target)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from itertools import permutations, groupby
+from itertools import permutations
 from collections import defaultdict
 
 
@@ -37,6 +37,24 @@ class Expression(object):
 
         numbers = a_nums + b_nums
         return numbers
+
+    def as_step(self):
+        a = self.a_val if isinstance(self.a, int) else self.a.value
+        b = self.b_val if isinstance(self.b, int) else self.b.value
+
+        return '{} {} {} = {}'.format(a, self.operator, b, self.value)
+
+    def steps(self):
+        if isinstance(self.a, int) and isinstance(self.b, int):
+            return [self.as_step()]
+
+        a_step = [] if isinstance(self.a, int) else self.a.steps()
+        b_step = [] if isinstance(self.b, int) else self.b.steps()
+
+        return [self.as_step()] + a_step + b_step
+
+    def ordered_steps(self):
+        return reversed(self.steps())
 
     def __str__(self):
         return '''{} = {} | {}'''.format(self.as_equation(), self.value, sorted(self.numbers()))
@@ -97,13 +115,15 @@ class Solver(object):
         iteration = 0
         while iteration < n_numbers - 2:
             iteration += 1
-            partials_map = process(numbers, self._ops, partials_map)
-            if len(partials_map[target]) > 0:
+            partials_map, target_found = process(numbers, self._ops, partials_map, target)
+
+            if target_found:
                 break
+
 
         # get the value closet to the target
         best_value = None
-        deviation = 1E10
+        deviation = 1E1000
         for value in sorted(partials_map.keys()):
             if value == target:
                 best_value = target
@@ -123,7 +143,7 @@ class Solver(object):
         return best_expression
 
 
-def process(numbers, operations, partials_map):
+def process(numbers, operations, partials_map, target):
     new_partials_map = defaultdict(list)  # because you cant add during iteration
     for _, expressions in partials_map.items():
         for expression in expressions:
@@ -137,10 +157,15 @@ def process(numbers, operations, partials_map):
                         new_expression = Expression(value, expression, num, op, func)
                         new_partials_map[value].append(new_expression)
 
+                        if value == target:
+                            partials_map = merge_maps(partials_map, new_partials_map)
+                            partials_map = filter_duplicates(partials_map)
+                            return partials_map, True
+
     partials_map = merge_maps(partials_map, new_partials_map)
     partials_map = filter_duplicates(partials_map)
 
-    return partials_map
+    return partials_map, False
 
 
 def is_valid_value(value):
