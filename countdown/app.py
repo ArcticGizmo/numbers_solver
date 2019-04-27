@@ -1,22 +1,32 @@
-from countdown.solver import Solver, Expression, is_subset
+from countdown.solver import Solver, Expression
+from countdown.generator import get_numbers
 
 
 def main():
+    n_large = 3
+
+    selection, target = get_numbers(n_large)
+    print('Numbers are: {} -> {}'.format(selection, target))
+
     solver = Solver()
 
-    numbers = [9, 6, 4, 3, 3, 50]
-    target = 330
-    print('Numbers: {}'.format(numbers))
+    best_answer = solver.answers(selection, target)
 
-    possible_numbers = solver.answers(numbers, target)
+    print('Best answer found: {}'.format(best_answer.value))
+
+    input('Hit enter to get solution')
+
+    print('Solution: {}'.format(str(best_answer)))
 
 
+    # solver = Solver()
+    #
+    # numbers = [9, 6, 4, 3, 3, 50]
+    # target = 330
+    # print('Numbers: {}'.format(numbers))
+    #
+    # possible_numbers = solver.answers(numbers, target)
 
-    # print('Numbers in; {}'.format(numbers))
-    # for value, expressions in possible_numbers.items():
-    #     print('Answers for: {}'.format(value))
-    #     for exp in expressions:
-    #         print('\t{}'.format(exp))
 
 if __name__ == '__main__':
     main()

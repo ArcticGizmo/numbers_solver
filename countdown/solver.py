@@ -78,6 +78,7 @@ class Solver(object):
         }
 
     def answers(self, numbers, target):
+        """ :rtype: Expression """
         n_numbers = len(numbers)
 
         # get all permutations for pairs of two numbers
@@ -91,19 +92,12 @@ class Solver(object):
                     expression = Expression(value, a, b, op, func)
                     partials_map[value].append(expression)
 
-        print('first map')
         partials_map = filter_duplicates(partials_map)
-        # _print_map(partials_map)
 
         iteration = 0
         while iteration < n_numbers - 2:
             iteration += 1
             partials_map = process(numbers, self._ops, partials_map)
-
-            print('\n------------- Iteration: {} --------'.format(iteration))
-            # _print_map(partials_map)
-            #
-            # input('----')
 
         # get the value closet to the target
         best_value = None
@@ -119,15 +113,12 @@ class Solver(object):
                 deviation = dev
 
         # get the best expression
-        print('Betst value is: {}'.format(best_value))
         best_expression = None
         for expression in partials_map[best_value]:
             if (best_expression is None) or (len(expression.numbers()) < len(best_expression.numbers())):
                 best_expression = expression
 
-        print('The best expression is: {}'.format(best_expression))
-
-        return partials_map
+        return best_expression
 
 
 def process(numbers, operations, partials_map):
